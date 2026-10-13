@@ -11,18 +11,20 @@ echo "keeper:TangoFoxtrot42" | chpasswd
 
 mkdir -p /home/player /home/keeper
 
-# ---------- level 1: cat flag.txt (meant for `docker exec`, no ssh needed) ----------
+# ---------- level 1: cat flag1.txt (meant for `docker exec`, no ssh needed) ----------
 mkdir -p /home/player/level1
-echo "FLAG{welcome_to_linux}" > /home/player/level1/flag.txt
-chmod 644 /home/player/level1/flag.txt
+echo "FLAG{welcome_to_linux}" > /home/player/level1/flag1.txt
+chmod 644 /home/player/level1/flag1.txt
 
 # ---------- level 2: just logging in over ssh ----------
-echo "FLAG{ssh_login_works}" > /home/player/flag2.txt
-chmod 644 /home/player/flag2.txt
+mkdir -p /home/player/level2
+echo "FLAG{ssh_login_works}" > /home/player/level2/flag2.txt
+chmod 644 /home/player/level2/flag2.txt
 
 # ---------- level 3: hidden file ----------
-echo "FLAG{hidden_files_use_a_dot}" > /home/player/.flag3.txt
-chmod 644 /home/player/.flag3.txt
+mkdir -p /home/player/level3
+echo "FLAG{hidden_files_use_a_dot}" > /home/player/level3/.flag3.txt
+chmod 644 /home/player/level3/.flag3.txt
 
 # ---------- level 4: nested directories ----------
 mkdir -p /home/player/level4/docs/2024/reports/final
@@ -33,9 +35,9 @@ mkdir -p /home/player/level4/docs/2024/drafts
 mkdir -p /home/player/level4/docs/2023
 
 # ---------- level 5: find (flag lives outside their home) ----------
-mkdir -p /var/backups/old/2019/.data
-echo "FLAG{find_finds_everything}" > /var/backups/old/2019/.data/flag5_8f3a.txt
-chmod 644 /var/backups/old/2019/.data/flag5_8f3a.txt
+mkdir -p /var/backups/old/2019/.data/level5
+echo "FLAG{find_finds_everything}" > /var/backups/old/2019/.data/level5/flag5.txt
+chmod 644 /var/backups/old/2019/.data/level5/flag5.txt
 chmod -R o+rx /var/backups
 
 # ---------- level 6: grep inside a noisy log ----------
@@ -54,10 +56,11 @@ mkdir -p /home/player/level6
 chmod 644 /home/player/level6/access.log
 
 # ---------- level 7: permissions + narrow sudo ----------
-echo "FLAG{sudo_opens_doors}" > /root/flag7.txt
-chmod 600 /root/flag7.txt
+mkdir -p /root/level7
+echo "FLAG{sudo_opens_doors}" > /root/level7/flag7.txt
+chmod 600 /root/level7/flag7.txt
 mkdir -p /etc/sudoers.d
-echo 'player ALL=(root) NOPASSWD: /usr/bin/cat /root/flag7.txt' > /etc/sudoers.d/player-level7
+echo 'player ALL=(root) NOPASSWD: /usr/bin/cat /root/level7/flag7.txt' > /etc/sudoers.d/player-level7
 chmod 440 /etc/sudoers.d/player-level7
 
 # ---------- level 8: password buried in a haystack, then su ----------
@@ -74,9 +77,10 @@ mkdir -p /home/player/level8
 } > /home/player/level8/inventory.csv
 chmod 644 /home/player/level8/inventory.csv
 
-echo "FLAG{su_and_see}" > /home/keeper/flag8.txt
-chmod 600 /home/keeper/flag8.txt
-chown keeper:keeper /home/keeper/flag8.txt
+mkdir -p /home/keeper/level8
+echo "FLAG{su_and_see}" > /home/keeper/level8/flag8.txt
+chmod 600 /home/keeper/level8/flag8.txt
+chown -R keeper:keeper /home/keeper/level8
 
 # ---------- level 9: pipe / decode ----------
 mkdir -p /home/player/level9
@@ -84,6 +88,13 @@ echo -n "FLAG{pipes_chain_commands}" | base64 > /home/player/level9/message.b64
 chmod 644 /home/player/level9/message.b64
 
 # ---------- level 10: compiled brute-force vault (see vault.c) ----------
+# No flag file here by design — the flag only exists as output printed by
+# the binary itself once you guess right, so there's nothing on disk to
+# find your way to. The directory just holds a pointer to the binary.
+mkdir -p /home/player/level10
+echo "Run: vault-level10 <3-letter-guess>  (it lives on your PATH)" > /home/player/level10/README.txt
+chmod 644 /home/player/level10/README.txt
+
 gcc -O2 -o /usr/local/bin/vault-level10 /tmp/vault.c
 strip /usr/local/bin/vault-level10
 chown root:root /usr/local/bin/vault-level10
